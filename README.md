@@ -45,12 +45,13 @@ $ ssh-keygen -t rsa -f backup_rsa
 ```
 
 Do not set any password on key pair. This generates two files, `backup_rsa` and `backup_rsa.pub`.
-You should add contents of the `backup_rsa.pub` file to `~/.ssh/authorized_keys` file on the
+You should add (append) contents of the `backup_rsa.pub` file to `~/.ssh/authorized_keys` file on the
 remote machine for the user which you are planing to use to connect to the remote machine.
+Put both generated files into `/config/.ssh` directory inside the `/config` volume.
 
 You should also configure SSH client inside the Docker container to use the private
 key for the connection to the remote machine. You can do this by creating a `config`
-file. For example:
+file inside `/config/.ssh`. For example:  
 
 ```
 Host example.com
@@ -60,6 +61,15 @@ Host example.com
     IdentityFile /config/.ssh/backup_rsa
 ```
 
+Important is to configure `IdentityFile` to point to the private key file.
+
+Moreover, you should create `known_hosts` file inside `/config/.ssh`, with
+the fingerprint of the remote machine's public key:
+
+```
+$ ssh-keyscan example.com > known_hosts
+```
+
 `/config` volume should generally contain the following files:
 
 ```
@@ -67,6 +77,7 @@ Host example.com
 /config/.ssh/backup_rsa
 /config/.ssh/backup_rsa.pub
 /config/.ssh/config
+/config/.ssh/known_hosts
 ```
 
 Remote machine should:
