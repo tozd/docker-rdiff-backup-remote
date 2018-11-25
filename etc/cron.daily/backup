@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+. /dev/shm/cron-environment
+
+export HOME=/config
+
+if [ -z "$RDIFF_BACKUP_SOURCE" ]; then
+  echo "\"RDIFF_BACKUP_SOURCE\" environment variable not set."
+  exit 1
+fi
+
+# One should mount a file with configuration /config/backup.list to configure precisely what to backup.
+if [ ! -e /config/backup.list ]; then
+  touch /config/backup.list
+fi
+
+# If it looks like a backup already exists, remove old backups.
+if [ -d /backup/rdiff-backup-data ]; then
+  ionice -c 3 /usr/bin/rdiff-backup -v2 --force --remove-older-than "${RDIFF_BACKUP_EXPIRE:-12M}" /backup
+fi
+
+# So that the exit value of the whole rdiff-backup call is rdiff-backup and not from the grep.
+# grep's -q assures that grep's exit value is always 0.
+set -o pipefail
+
+# We grep out UpdateError errors because they are not really actionable and happen quite
+# often when backing up active files like logs and databases.
+ionice -c 3 /usr/bin/rdiff-backup --preserve-numerical-ids --include-globbing-filelist /source/backup.list "$RDIFF_BACKUP_SOURCE" /backup 2>&1 | grep -q -v UpdateError
