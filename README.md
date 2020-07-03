@@ -1,3 +1,7 @@
+# tozd/rdiff-backup-remote
+
+<https://gitlab.com/tozd/docker/rdiff-backup-remote>
+
 Docker image providing backups with [rdiff-backup](http://www.nongnu.org/rdiff-backup/).
 The main purpose is to backup remote machines to a local backup volume. Using rdiff-backup
 gives you direct access to the latest version with past versions possible to be
@@ -5,7 +9,7 @@ reconstructed using rdiff-backup. Past changes are stored using reverse incremen
 Backup runs daily.
 
 For local host backup instead of remote backup, consider
-[tozd/rdiff-backup Docker image](https://github.com/tozd/docker-rdiff-backup).
+[tozd/rdiff-backup Docker image](https://gitlab.com/tozd/docker/rdiff-backup).
 
 Use a config volume `/config` for config files and mount a directory to where
 you want to store the backup to `/backup` volume.
