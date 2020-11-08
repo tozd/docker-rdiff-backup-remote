@@ -2,6 +2,13 @@
 
 <https://gitlab.com/tozd/docker/rdiff-backup-remote>
 
+Available as:
+
+* [`tozd/rdiff-backup-remote`](https://hub.docker.com/r/tozd/rdiff-backup-remote)
+* [`registry.gitlab.com/tozd/docker/rdiff-backup-remote`](https://gitlab.com/tozd/docker/rdiff-backup-remote/container_registry)
+
+## Description
+
 Docker image providing backups with [rdiff-backup](http://www.nongnu.org/rdiff-backup/).
 The main purpose is to backup remote machines to a local backup volume. Using rdiff-backup
 gives you direct access to the latest version with past versions possible to be
