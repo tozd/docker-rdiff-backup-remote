@@ -109,3 +109,13 @@ Remote machine should:
 - Have the user used to connect to the machine configured with sudo `NOPASSWD`
   so that rdiff-backup can obtain root permissions automatically.
 - Have a SSH public key added to user's `~/.ssh/authorized_keys` file.
+
+To get e-mails with any errors during daily backups, you have also to
+configure `MAILTO`, `ADMINADDR`, and `REMOTES` environment variables
+as described in [`tozd/mailer`](https://gitlab.com/tozd/docker/mailer)
+and [`tozd/cron`](https://gitlab.com/tozd/docker/cron) Docker images.
+
+## GitHub mirror
+
+There is also a [read-only GitHub mirror available](https://github.com/tozd/docker-rdiff-backup-remote),
+if you need to fork the project there.
