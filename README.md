@@ -4,16 +4,35 @@
 
 Available as:
 
-* [`tozd/rdiff-backup-remote`](https://hub.docker.com/r/tozd/rdiff-backup-remote)
-* [`registry.gitlab.com/tozd/docker/rdiff-backup-remote`](https://gitlab.com/tozd/docker/rdiff-backup-remote/container_registry)
+- [`tozd/rdiff-backup-remote`](https://hub.docker.com/r/tozd/rdiff-backup-remote)
+- [`registry.gitlab.com/tozd/docker/rdiff-backup-remote`](https://gitlab.com/tozd/docker/rdiff-backup-remote/container_registry)
+
+## Image inheritance
+
+[`tozd/base`](https://gitlab.com/tozd/docker/base) ← [`tozd/dinit`](https://gitlab.com/tozd/docker/dinit) ← [`tozd/mailer`](https://gitlab.com/tozd/docker/mailer) ← [`tozd/cron`](https://gitlab.com/tozd/docker/cron) ← `tozd/rdiff-backup-remote`
+
+## Tags
+
+- `latest`: rdiff-backup 2.0.5
+
+## Volumes
+
+- `/config`: Configuration files.
+- `/backup`: Destination to where the backup is made.
+
+## Variables
+
+- `RDIFF_BACKUP_SOURCE`: Remote location from which to backup. Example: `user@example.com::/`
+- `RDIFF_BACKUP_EXPIRE`: How long to keep past versions, provided as a string according to
+  _time formats_ section of [rdiff-backup man page](http://www.nongnu.org/rdiff-backup/rdiff-backup.1.html).
+  Default is 12M for 12 months.
 
 ## Description
 
-Docker image providing backups with [rdiff-backup](http://www.nongnu.org/rdiff-backup/).
+Docker image providing daily backups with [rdiff-backup](http://www.nongnu.org/rdiff-backup/).
 The main purpose is to backup remote machines to a local backup volume. Using rdiff-backup
 gives you direct access to the latest version with past versions possible to be
 reconstructed using rdiff-backup. Past changes are stored using reverse increments.
-Backup runs daily.
 
 For local host backup instead of remote backup, consider
 [tozd/rdiff-backup Docker image](https://gitlab.com/tozd/docker/rdiff-backup).
@@ -38,16 +57,9 @@ Example:
 ```
 
 This file configures that `/etc`, `/home`, `/root` and parts of `/var` are backed up, while the
-rest of the remote machine is ignored. Consult section *file selection* of
+rest of the remote machine is ignored. Consult section _file selection_ of
 [rdiff-backup man page](http://www.nongnu.org/rdiff-backup/rdiff-backup.1.html)
 for more information on the format of this file.
-
-Used environment variables:
- * `RDIFF_BACKUP_SOURCE` – remote location from which to backup;
-   example: `user@example.com::/`
- * `RDIFF_BACKUP_EXPIRE` – how long to keep past versions, provided as a string according to
-   *time formats* section of [rdiff-backup man page](http://www.nongnu.org/rdiff-backup/rdiff-backup.1.html);
-   default: `12M` for 12 months
 
 For rdiff-backup to be able to connect to the remote machine, a SSH key pair should be generated:
 
@@ -62,7 +74,7 @@ Put both generated files into `/config/.ssh` directory inside the `/config` volu
 
 You should also configure SSH client inside the Docker container to use the private
 key for the connection to the remote machine. You can do this by creating a `config`
-file inside `/config/.ssh`. For example:  
+file inside `/config/.ssh`. For example:
 
 ```
 Host example.com
@@ -92,7 +104,8 @@ $ ssh-keyscan example.com > known_hosts
 ```
 
 Remote machine should:
- * Have rdiff-backup installed at `/usr/bin/rdiff-backup`.
- * Have the user used to connect to the machine configured with sudo `NOPASSWD`
-   so that rdiff-backup can obtain root permissions automatically.
- * Have a SSH public key added to user's `~/.ssh/authorized_keys` file.
+
+- Have rdiff-backup installed at `/usr/bin/rdiff-backup`.
+- Have the user used to connect to the machine configured with sudo `NOPASSWD`
+  so that rdiff-backup can obtain root permissions automatically.
+- Have a SSH public key added to user's `~/.ssh/authorized_keys` file.
