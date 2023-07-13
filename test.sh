@@ -43,6 +43,7 @@ echo "Creating Docker network"
 time docker network create testnet
 cleanup_network=1
 
+echo "Preparing"
 apk add --no-cache openssh-client
 ssh-keygen -f test/.ssh/backup_rsa -N ""
 cleanup_key=1
