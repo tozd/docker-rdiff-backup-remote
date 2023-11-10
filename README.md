@@ -48,15 +48,14 @@ Example:
 + /etc
 + /home
 + /root
-+ /backups
-+ /log
++ /var/log
 + /usr/local/bin
 + /usr/local/etc
 + /usr/local/sbin
 - /
 ```
 
-This file configures that `/etc`, `/home`, `/root` and parts of `/var` are backed up, while the
+This file configures that `/etc`, `/home`, `/root` and parts of `/var` and `/usr` are backed up, while the
 rest of the remote machine is ignored. Consult section _file selection_ of
 [rdiff-backup man page](http://www.nongnu.org/rdiff-backup/rdiff-backup.1.html)
 for more information on the format of this file.
