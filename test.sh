@@ -56,7 +56,17 @@ echo "Sleeping"
 sleep 5
 
 echo "Installing rdiff-backup into OpenSSH server image"
-docker exec openssh apk add --no-cache rdiff-backup
+if [ "${TAG}" == "1" ]; then
+  docker exec openssh wget http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/rdiff-backup-1.2.8-r2.apk
+  docker exec openssh wget http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/python2-2.7.18-r0.apk
+  docker exec openssh wget http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/libffi-3.2.1-r6.apk
+  docker exec openssh apk add --no-cache libffi-3.2.1-r6.apk
+  docker exec openssh apk add --no-cache python2-2.7.18-r0.apk
+  docker exec openssh apk add --no-cache rdiff-backup-1.2.8-r2.apk
+  docker exec openssh rm -f rdiff-backup-1.2.8-r2.apk python2-2.7.18-r0.apk libffi-3.2.1-r6.apk
+else
+  docker exec openssh apk add --no-cache rdiff-backup
+fi
 
 echo "Running Docker image"
 docker run -d --name test --network testnet -v "$(pwd)/test:/config" -e "RDIFF_BACKUP_SOURCE=user@openssh::/" "${CI_REGISTRY_IMAGE}:${TAG}"
