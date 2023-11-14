@@ -12,6 +12,11 @@ if [ ! -e /config/backup.list ]; then
   touch /config/backup.list
 fi
 
+if pgrep rdiff-backup >/dev/null ; then
+  echo "rdiff-backup is already running"
+  exit 2
+fi
+
 # If it looks like a backup already exists, remove old backups.
 if [ -d /backup/rdiff-backup-data ]; then
   ionice -c 3 /usr/bin/rdiff-backup -v2 --force --remove-older-than "${RDIFF_BACKUP_EXPIRE:-12M}" /backup
