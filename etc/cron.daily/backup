@@ -27,4 +27,4 @@ set -o pipefail
 
 # We grep out UpdateError errors because they are not really actionable and happen quite
 # often when backing up active files like logs and databases.
-ionice -c 3 /usr/bin/rdiff-backup --preserve-numerical-ids --exclude-sockets --remote-schema 'ssh -F /config/.ssh/config -o UserKnownHostsFile=/config/.ssh/known_hosts -C %s "sudo /usr/bin/rdiff-backup --server"' --include-globbing-filelist /config/backup.list "$RDIFF_BACKUP_SOURCE" /backup 2>&1 | { grep -v UpdateError || true; }
+ionice -c 3 /usr/bin/rdiff-backup --preserve-numerical-ids --exclude-sockets --remote-schema 'ssh -F /config/.ssh/config -o UserKnownHostsFile=/config/.ssh/known_hosts -C %s "sudo ionice -c 3 /usr/bin/rdiff-backup --server"' --include-globbing-filelist /config/backup.list "$RDIFF_BACKUP_SOURCE" /backup 2>&1 | { grep -v UpdateError || true; }
