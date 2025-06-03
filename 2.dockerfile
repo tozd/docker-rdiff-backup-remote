@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/tozd/docker/cron:ubuntu-jammy
+FROM registry.gitlab.com/tozd/docker/cron:ubuntu-noble
 
 VOLUME /config
 VOLUME /backup
